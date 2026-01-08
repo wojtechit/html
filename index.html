@@ -140,32 +140,11 @@
             box-sizing: border-box;
         }
 
-        /* Map & Widgets */
+        /* Map */
         #map {
             height: 350px;
             border-radius: 16px;
             border: 2px solid var(--card-bg);
-        }
-
-        .widget-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 40px;
-        }
-
-        .mini-widget {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 0.8rem;
-        }
-
-        .mini-widget h3 {
-            font-size: 0.9rem;
-            margin-top: 0;
-            color: var(--primary);
         }
 
         @media (max-width: 768px) {
@@ -238,21 +217,6 @@
             </div>
         </section>
 
-        <section id="tools">
-            <div class="section-title">
-                <h2>Twoje Narzędzia Sieciowe</h2>
-                <p style="color: var(--text-muted);">Sprawdź parametry swojego połączenia w czasie rzeczywistym.</p>
-            </div>
-            <div class="widget-grid">
-                <div class="mini-widget"><h3>IP</h3><div class="vpn-widget" type="geoip/ip"></div></div>
-                <div class="mini-widget"><h3>Miasto</h3><div class="vpn-widget" type="geoip/city"></div></div>
-                <div class="mini-widget"><h3>Dostawca</h3><div class="vpn-widget" type="geoip/isp"></div></div>
-                <div class="mini-widget"><h3>System</h3><div class="vpn-widget" type="geoip/os"></div></div>
-                <div class="mini-widget"><h3>Prędkość</h3><div class="vpn-widget" type="speed/speedtest"></div></div>
-                <div class="mini-widget"><h3>Pogoda</h3><div class="vpn-widget" type="weather/current"></div></div>
-            </div>
-        </section>
-
     </div>
 
     <footer style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
@@ -260,7 +224,6 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script src="https://widget.vpn.com/vpn-widget.js"></script>
     <script>
         function updateClock() {
             const now = new Date();
@@ -269,7 +232,8 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        var map = L.map('map').setView([51.6114, 20.0456], 13); // Współrzędne dla Lubochni
+        // Współrzędne dla Lubochni
+        var map = L.map('map').setView([51.6114, 20.0456], 13); 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap'
         }).addTo(map);
