@@ -1,243 +1,1623 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WOJTECH | Profesjonalny Serwis Elektroniki</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00ff88;
-            --primary-dark: #00c066;
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WOJTECH | Profesjonalny Serwis Elektroniki 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+:root {
+--primary: #00ff88;
+--primary-dark: #00c066;
+--secondary: #60efff;
+--bg-dark: #0a0e1a;
+--card-bg: #1e293b;
+--text-light: #f8fafc;
+--text-muted: #94a3b8;
+--glass-bg: rgba(30, 41, 59, 0.6);
+--shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            color: var(--text-light);
-            background-color: var(--bg-dark);
-            scroll-behavior: smooth;
-        }
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+body, html {
+font-family: 'Inter', sans-serif;
+color: var(--text-light);
+background-color: var(--bg-dark);
+scroll-behavior: smooth;
+overflow-x: hidden;
+}
 
-        /* Hero Section */
-        header {
-            height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-        }
+/* Animated Particles Background */
+#particles-canvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 0;
+pointer-events: none;
+opacity: 0.4;
+}
 
-        .hero h1 {
-            font-size: 4rem;
-            margin: 0;
-            letter-spacing: -2px;
-            background: linear-gradient(to right, #00ff88, #60efff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* Scroll Progress Bar */
+#scroll-progress {
+position: fixed;
+top: 0;
+left: 0;
+width: 0%;
+height: 4px;
+background: linear-gradient(90deg, var(--primary), var(--secondary));
+z-index: 9999;
+transition: width 0.1s ease;
+box-shadow: 0 0 20px var(--primary);
+}
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 20px auto;
-        }
+/* Container */
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+position: relative;
+z-index: 1;
+}
 
-        /* Cards & Layout */
-        .section-title {
-            text-align: center;
-            margin: 60px 0 40px;
-        }
+/* Navbar */
+nav {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+background: var(--glass-bg);
+backdrop-filter: blur(20px);
+padding: 15px 0;
+z-index: 1000;
+transition: all 0.3s ease;
+border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
 
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-        }
+nav.scrolled {
+background: rgba(30, 41, 59, 0.95);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
 
-        .grid-services {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
+.nav-container {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
 
-        .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 30px;
-            transition: transform 0.3s ease;
-        }
+.logo {
+font-size: 1.8rem;
+font-weight: 900;
+background: linear-gradient(135deg, #00ff88, #60efff, #00ff88);
+background-size: 200% 200%;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: gradientFlow 3s ease infinite;
+text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+}
 
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-        }
+@keyframes gradientFlow {
+0%, 100% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+}
 
-        /* Buttons */
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
+.nav-links {
+display: flex;
+gap: 30px;
+align-items: center;
+}
 
-        .btn {
-            padding: 14px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
-        }
+.nav-links a {
+text-decoration: none;
+color: var(--text-light);
+transition: all 0.3s;
+font-weight: 500;
+position: relative;
+}
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--bg-dark);
-        }
+.nav-links a::after {
+content: '';
+position: absolute;
+bottom: -5px;
+left: 0;
+width: 0;
+height: 2px;
+background: var(--primary);
+transition: width 0.3s;
+}
 
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
+.nav-links a:hover::after {
+width: 100%;
+}
 
-        .btn:hover {
-            opacity: 0.8;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-        }
+.nav-links a:hover {
+color: var(--primary);
+transform: translateY(-2px);
+}
 
-        /* Contact Section */
-        .contact-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
-        }
+/* Mobile Menu Toggle */
+.menu-toggle {
+display: none;
+flex-direction: column;
+gap: 5px;
+cursor: pointer;
+}
 
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            color: white;
-            box-sizing: border-box;
-        }
+.menu-toggle span {
+width: 25px;
+height: 3px;
+background: var(--primary);
+transition: 0.3s;
+border-radius: 3px;
+}
 
-        /* Map */
-        #map {
-            height: 350px;
-            border-radius: 16px;
-            border: 2px solid var(--card-bg);
-        }
+/* Hero Section */
+header {
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+position: relative;
+overflow: hidden;
+padding: 100px 20px 50px;
+}
 
-        @media (max-width: 768px) {
-            .contact-wrapper { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2.5rem; }
-        }
-    </style>
+.hero-bg {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.15), transparent 70%);
+animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+0%, 100% { transform: scale(1); opacity: 0.3; }
+50% { transform: scale(1.2); opacity: 0.6; }
+}
+
+.hero h1 {
+font-size: clamp(3rem, 8vw, 6rem);
+margin: 0;
+letter-spacing: -3px;
+font-weight: 900;
+background: linear-gradient(135deg, #00ff88, #60efff);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: fadeInUp 1s ease-out;
+text-shadow: 0 0 80px rgba(0, 255, 136, 0.5);
+}
+
+.hero p {
+font-size: clamp(1rem, 2vw, 1.3rem);
+color: var(--text-muted);
+max-width: 700px;
+margin: 20px auto;
+animation: fadeInUp 1.5s ease-out;
+line-height: 1.8;
+}
+
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stats Counter */
+.stats-container {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 30px;
+margin: 60px 0;
+}
+
+.stat-card {
+background: var(--glass-bg);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(0, 255, 136, 0.2);
+border-radius: 20px;
+padding: 30px;
+text-align: center;
+transition: all 0.4s ease;
+}
+
+.stat-card:hover {
+transform: translateY(-10px) scale(1.05);
+box-shadow: 0 20px 60px rgba(0, 255, 136, 0.3);
+border-color: var(--primary);
+}
+
+.stat-number {
+font-size: 3rem;
+font-weight: 900;
+color: var(--primary);
+display: block;
+}
+
+.stat-label {
+color: var(--text-muted);
+font-size: 0.95rem;
+margin-top: 10px;
+}
+
+/* Buttons */
+.btn-group {
+display: flex;
+gap: 20px;
+justify-content: center;
+margin-top: 40px;
+flex-wrap: wrap;
+animation: fadeInUp 2s ease-out;
+}
+
+.btn {
+padding: 18px 40px;
+border-radius: 12px;
+text-decoration: none;
+font-weight: 700;
+transition: all 0.3s;
+cursor: pointer;
+border: none;
+font-size: 1rem;
+position: relative;
+overflow: hidden;
+}
+
+.btn::before {
+content: '';
+position: absolute;
+top: 50%;
+left: 50%;
+width: 0;
+height: 0;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.2);
+transform: translate(-50%, -50%);
+transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+width: 300px;
+height: 300px;
+}
+
+.btn-primary {
+background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+color: var(--bg-dark);
+box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+}
+
+.btn-secondary {
+background: transparent;
+color: var(--primary);
+border: 2px solid var(--primary);
+}
+
+.btn:hover {
+transform: translateY(-3px);
+box-shadow: 0 15px 40px rgba(0, 255, 136, 0.6);
+}
+
+/* Section Styling */
+section {
+padding: 100px 0;
+position: relative;
+}
+
+.section-title {
+text-align: center;
+margin-bottom: 60px;
+opacity: 0;
+transform: translateY(50px);
+transition: all 0.8s ease-out;
+}
+
+.section-title.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+.section-title h2 {
+font-size: clamp(2rem, 5vw, 3.5rem);
+background: linear-gradient(135deg, var(--primary), var(--secondary));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+font-weight: 900;
+margin-bottom: 15px;
+}
+
+.section-title p {
+color: var(--text-muted);
+font-size: 1.1rem;
+}
+
+/* 3D Card Grid */
+.grid-services {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 30px;
+perspective: 1000px;
+}
+
+.card {
+background: var(--glass-bg);
+backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 25px;
+padding: 40px;
+transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+box-shadow: var(--shadow);
+opacity: 0;
+transform: translateY(50px) rotateX(10deg);
+transform-style: preserve-3d;
+position: relative;
+overflow: hidden;
+}
+
+.card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(96, 239, 255, 0.1));
+opacity: 0;
+transition: opacity 0.5s;
+}
+
+.card:hover::before {
+opacity: 1;
+}
+
+.card.visible {
+opacity: 1;
+transform: translateY(0) rotateX(0);
+}
+
+.card:hover {
+transform: translateY(-20px) rotateY(5deg) rotateX(-5deg);
+box-shadow: 0 30px 60px rgba(0, 255, 136, 0.4);
+border-color: var(--primary);
+}
+
+.card i {
+font-size: 3rem;
+color: var(--primary);
+margin-bottom: 20px;
+display: block;
+animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-10px); }
+}
+
+.card h3 {
+font-size: 1.5rem;
+margin-bottom: 15px;
+color: var(--text-light);
+}
+
+.card p {
+color: var(--text-muted);
+line-height: 1.8;
+}
+
+/* Process Timeline */
+.process-timeline {
+position: relative;
+padding: 40px 0;
+}
+
+.timeline-item {
+display: grid;
+grid-template-columns: 1fr 80px 1fr;
+gap: 30px;
+margin-bottom: 60px;
+align-items: center;
+}
+
+.timeline-content {
+background: var(--glass-bg);
+backdrop-filter: blur(10px);
+padding: 30px;
+border-radius: 20px;
+border: 1px solid rgba(0, 255, 136, 0.2);
+transition: all 0.4s;
+}
+
+.timeline-content:hover {
+transform: scale(1.05);
+box-shadow: 0 20px 50px rgba(0, 255, 136, 0.3);
+}
+
+.timeline-dot {
+width: 80px;
+height: 80px;
+background: linear-gradient(135deg, var(--primary), var(--secondary));
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.8rem;
+font-weight: 900;
+color: var(--bg-dark);
+box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+}
+
+.timeline-item:nth-child(even) .timeline-content:first-child {
+order: 3;
+}
+
+/* Cost Calculator */
+.calculator {
+background: var(--glass-bg);
+backdrop-filter: blur(20px);
+border: 1px solid rgba(0, 255, 136, 0.2);
+border-radius: 25px;
+padding: 50px;
+max-width: 700px;
+margin: 0 auto;
+}
+
+.calc-group {
+margin-bottom: 30px;
+}
+
+.calc-group label {
+display: block;
+margin-bottom: 10px;
+color: var(--primary);
+font-weight: 600;
+font-size: 1.1rem;
+}
+
+.calc-group select {
+width: 100%;
+padding: 15px;
+background: rgba(10, 14, 26, 0.8);
+border: 1px solid rgba(0, 255, 136, 0.3);
+border-radius: 12px;
+color: var(--text-light);
+font-size: 1rem;
+cursor: pointer;
+transition: all 0.3s;
+}
+
+.calc-group select:focus {
+outline: none;
+border-color: var(--primary);
+box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.calc-result {
+background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(96, 239, 255, 0.2));
+padding: 30px;
+border-radius: 15px;
+text-align: center;
+margin-top: 30px;
+}
+
+.calc-result h3 {
+font-size: 1.3rem;
+margin-bottom: 15px;
+color: var(--text-light);
+}
+
+.calc-price {
+font-size: 3rem;
+font-weight: 900;
+color: var(--primary);
+text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+}
+
+/* FAQ Accordion */
+.faq-container {
+max-width: 800px;
+margin: 0 auto;
+}
+
+.faq-item {
+background: var(--glass-bg);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 15px;
+margin-bottom: 20px;
+overflow: hidden;
+transition: all 0.3s;
+}
+
+.faq-question {
+padding: 25px;
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-weight: 600;
+font-size: 1.1rem;
+transition: all 0.3s;
+}
+
+.faq-question:hover {
+background: rgba(0, 255, 136, 0.1);
+color: var(--primary);
+}
+
+.faq-question i {
+transition: transform 0.3s;
+color: var(--primary);
+}
+
+.faq-item.active .faq-question i {
+transform: rotate(180deg);
+}
+
+.faq-answer {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.4s ease, padding 0.4s ease;
+padding: 0 25px;
+color: var(--text-muted);
+line-height: 1.8;
+}
+
+.faq-item.active .faq-answer {
+max-height: 500px;
+padding: 0 25px 25px;
+}
+
+/* Technologies */
+.tech-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+gap: 30px;
+}
+
+.tech-item {
+background: var(--glass-bg);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 20px;
+padding: 30px;
+text-align: center;
+transition: all 0.4s;
+}
+
+.tech-item:hover {
+transform: translateY(-10px) scale(1.05);
+border-color: var(--primary);
+box-shadow: 0 20px 50px rgba(0, 255, 136, 0.3);
+}
+
+.tech-item i {
+font-size: 3rem;
+color: var(--primary);
+margin-bottom: 15px;
+}
+
+.tech-item h4 {
+font-size: 1rem;
+color: var(--text-light);
+}
+
+/* Contact Section */
+.contact-wrapper {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 50px;
+margin-bottom: 80px;
+}
+
+input, textarea {
+width: 100%;
+padding: 18px;
+margin-bottom: 20px;
+background: rgba(10, 14, 26, 0.8);
+border: 1px solid rgba(0, 255, 136, 0.3);
+border-radius: 12px;
+color: white;
+box-sizing: border-box;
+transition: all 0.3s;
+font-family: 'Inter', sans-serif;
+font-size: 1rem;
+}
+
+input:focus, textarea:focus {
+border-color: var(--primary);
+outline: none;
+box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+transform: translateY(-2px);
+}
+
+/* Map */
+#map {
+height: 400px;
+border-radius: 20px;
+border: 2px solid rgba(0, 255, 136, 0.3);
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Notification Toast */
+.notification {
+position: fixed;
+top: 100px;
+right: -400px;
+background: var(--glass-bg);
+backdrop-filter: blur(20px);
+border: 1px solid var(--primary);
+border-radius: 15px;
+padding: 20px 30px;
+min-width: 300px;
+box-shadow: 0 20px 60px rgba(0, 255, 136, 0.4);
+z-index: 10000;
+transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.notification.show {
+right: 30px;
+}
+
+.notification i {
+color: var(--primary);
+margin-right: 15px;
+font-size: 1.5rem;
+}
+
+/* Live Chat Widget */
+.chat-widget {
+position: fixed;
+bottom: 30px;
+right: 30px;
+z-index: 9999;
+}
+
+.chat-button {
+width: 70px;
+height: 70px;
+background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+box-shadow: 0 10px 40px rgba(0, 255, 136, 0.6);
+transition: all 0.3s;
+animation: pulse-chat 2s infinite;
+}
+
+@keyframes pulse-chat {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.1); }
+}
+
+.chat-button:hover {
+transform: scale(1.15);
+}
+
+.chat-button i {
+font-size: 2rem;
+color: var(--bg-dark);
+}
+
+.chat-box {
+position: absolute;
+bottom: 90px;
+right: 0;
+width: 350px;
+height: 500px;
+background: var(--card-bg);
+border-radius: 20px;
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+display: none;
+flex-direction: column;
+overflow: hidden;
+border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.chat-box.active {
+display: flex;
+animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+from { transform: translateY(20px); opacity: 0; }
+to { transform: translateY(0); opacity: 1; }
+}
+
+.chat-header {
+background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+padding: 20px;
+color: var(--bg-dark);
+font-weight: 700;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.chat-close {
+cursor: pointer;
+font-size: 1.5rem;
+}
+
+.chat-messages {
+flex: 1;
+padding: 20px;
+overflow-y: auto;
+}
+
+.chat-message {
+background: var(--glass-bg);
+padding: 12px 18px;
+border-radius: 15px;
+margin-bottom: 15px;
+max-width: 80%;
+animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-message.bot {
+background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(96, 239, 255, 0.2));
+align-self: flex-start;
+}
+
+.chat-input-area {
+padding: 20px;
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+display: flex;
+gap: 10px;
+}
+
+.chat-input-area input {
+margin: 0;
+flex: 1;
+}
+
+.chat-send {
+padding: 15px 25px;
+background: var(--primary);
+color: var(--bg-dark);
+border: none;
+border-radius: 10px;
+cursor: pointer;
+font-weight: 700;
+transition: all 0.3s;
+}
+
+.chat-send:hover {
+background: var(--primary-dark);
+transform: scale(1.05);
+}
+
+/* Warranty Cards */
+.warranty-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 30px;
+}
+
+.warranty-card {
+background: var(--glass-bg);
+backdrop-filter: blur(10px);
+border: 2px solid rgba(0, 255, 136, 0.3);
+border-radius: 20px;
+padding: 40px;
+text-align: center;
+transition: all 0.4s;
+position: relative;
+overflow: hidden;
+}
+
+.warranty-card::before {
+content: '';
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+transform: rotate(45deg);
+transition: all 0.6s;
+}
+
+.warranty-card:hover::before {
+left: 100%;
+}
+
+.warranty-card:hover {
+transform: translateY(-10px);
+border-color: var(--primary);
+box-shadow: 0 25px 60px rgba(0, 255, 136, 0.4);
+}
+
+.warranty-icon {
+font-size: 3.5rem;
+color: var(--primary);
+margin-bottom: 20px;
+}
+
+.warranty-period {
+font-size: 2.5rem;
+font-weight: 900;
+color: var(--primary);
+margin: 15px 0;
+}
+
+/* Footer */
+footer {
+text-align: center;
+padding: 60px 20px;
+color: var(--text-muted);
+font-size: 1rem;
+border-top: 1px solid rgba(255, 255, 255, 0.05);
+background: rgba(10, 14, 26, 0.8);
+}
+
+.footer-links {
+display: flex;
+justify-content: center;
+gap: 30px;
+margin: 30px 0;
+}
+
+footer a {
+color: var(--primary);
+font-size: 2rem;
+transition: all 0.3s;
+}
+
+footer a:hover {
+color: var(--secondary);
+transform: translateY(-5px) scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+.contact-wrapper { grid-template-columns: 1fr; }
+.timeline-item { grid-template-columns: 1fr; }
+.timeline-dot { margin: 20px auto; }
+.timeline-item:nth-child(even) .timeline-content:first-child { order: 1; }
+}
+
+@media (max-width: 768px) {
+.hero h1 { font-size: 3rem; }
+.nav-links { 
+display: none;
+position: absolute;
+top: 100%;
+left: 0;
+width: 100%;
+background: var(--card-bg);
+flex-direction: column;
+padding: 20px;
+gap: 15px;
+}
+.nav-links.active { display: flex; }
+.menu-toggle { display: flex; }
+.chat-box { width: 90vw; right: 5vw; }
+.stats-container { grid-template-columns: 1fr; }
+}
+
+/* Accessibility */
+.sr-only {
+position: absolute;
+width: 1px;
+height: 1px;
+padding: 0;
+margin: -1px;
+overflow: hidden;
+clip: rect(0, 0, 0, 0);
+white-space: nowrap;
+border-width: 0;
+}
+
+/* Loading Animation */
+@keyframes rotate {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+</style>
 </head>
 <body>
+<!-- Scroll Progress Bar -->
+<div id="scroll-progress"></div>
 
-    <header>
-        <div class="hero">
-            <h1>WOJTECH</h1>
-            <p>Ekspercka naprawa laptopów, telefonów i komputerów. <br>Przywracamy Twój sprzęt do życia przy użyciu najnowszych technologii.</p>
-            <div class="btn-group">
-                <a href="#contact" class="btn btn-primary">Zgłoś Naprawę</a>
-                <a href="#services" class="btn btn-secondary">Zobacz Usługi</a>
-            </div>
-        </div>
-    </header>
+<!-- Particles Canvas -->
+<canvas id="particles-canvas"></canvas>
 
-    <div class="container">
-        
-        <section id="services">
-            <div class="section-title">
-                <h2>Czym się zajmujemy?</h2>
-            </div>
-            <div class="grid-services">
-                <div class="card">
-                    <h3>📱 Naprawa Telefonów</h3>
-                    <p>Wymiana szybki, baterii, naprawa gniazd ładowania oraz ratowanie urządzeń po zalaniu. Obsługujemy wszystkie marki.</p>
-                </div>
-                <div class="card">
-                    <h3>💻 Serwis Laptopów</h3>
-                    <p>Czyszczenie układu chłodzenia, wymiana matryc, klawiatur oraz naprawa płyt głównych i modernizacja sprzętu.</p>
-                </div>
-                <div class="card">
-                    <h3>🖥️ Komputery PC</h3>
-                    <p>Optymalizacja systemu, usuwanie wirusów, składanie zestawów gamingowych i profesjonalne doradztwo sprzętowe.</p>
-                </div>
-            </div>
-        </section>
+<!-- Navigation -->
+<nav>
+<div class="container nav-container">
+<div class="logo">⚡ WOJTECH</div>
+<div class="menu-toggle" onclick="toggleMenu()">
+<span></span>
+<span></span>
+<span></span>
+</div>
+<div class="nav-links">
+<a href="#services">Usługi</a>
+<a href="#process">Proces</a>
+<a href="#calculator">Kalkulator</a>
+<a href="#faq">FAQ</a>
+<a href="#contact">Kontakt</a>
+</div>
+</div>
+</nav>
 
-        <section id="contact">
-            <div class="section-title">
-                <h2>Kontakt i Lokalizacja</h2>
-            </div>
-            <div class="contact-wrapper">
-                <div class="card">
-                    <h3>Napisz do nas</h3>
-                    <form action="#" class="contact-form">
-                        <input type="text" placeholder="Imię i Nazwisko" required>
-                        <input type="email" placeholder="Adres E-mail" required>
-                        <textarea rows="5" placeholder="Opisz problem ze sprzętem..." required></textarea>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Wyślij zgłoszenie</button>
-                    </form>
-                    <div style="margin-top: 25px; color: var(--text-muted);">
-                        <p>📍 Lubochnia, ul. Tomaszowska 23a</p>
-                        <p>📞 <a href="tel:+48789229450" style="color: var(--primary);">+48 789 229 450</a></p>
-                        <p>✉️ prooosty@gmail.com</p>
-                    </div>
-                </div>
-                <div>
-                    <div id="map"></div>
-                    <div class="card" style="margin-top: 20px; text-align: center;">
-                        <div id="clock" style="font-size: 2.5rem; font-weight: bold; color: var(--primary);"></div>
-                        <p style="margin: 0; color: var(--text-muted);">Czas lokalny w naszym serwisie</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- Hero Section -->
+<header>
+<div class="hero-bg"></div>
+<div class="hero">
+<h1>WOJTECH</h1>
+<p>Szybka i profesjonalna naprawa laptopów, telefonów i komputerów z wykorzystaniem technologii Ai, diagnostyki i automatyzacji w 2026 roku. Przywracamy Twój sprzęt do życia!</p>
+<div class="btn-group">
+<a href="#contact" class="btn btn-primary">Zgłoś Naprawę</a>
+<a href="#services" class="btn btn-secondary">Zobacz Usługi</a>
+</div>
 
-    </div>
+<!-- Stats Counter -->
+<div class="container">
+<div class="stats-container">
+<div class="stat-card">
+<span class="stat-number" data-target="1337">0</span>
+<span class="stat-label">Naprawionych Urządzeń</span>
+</div>
+<div class="stat-card">
+<span class="stat-number" data-target="98">0</span>
+<span class="stat-label">% Zadowolonych Klientów</span>
+</div>
+<div class="stat-card">
+<span class="stat-number" data-target="24">0</span>
+<span class="stat-label">Godzin Wsparcia</span>
+</div>
+<div class="stat-card">
+<span class="stat-number" data-target="10">0</span>
+<span class="stat-label">Lat Doświadczenia</span>
+</div>
+</div>
+</div>
+</div>
+</header>
 
-    <footer style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
-        &copy; 2026 WOJTECH. Wszystkie prawa zastrzeżone.
-    </footer>
+<!-- Services Section -->
+<div class="container">
+<section id="services">
+<div class="section-title">
+<h2>Czym się zajmujemy?</h2>
+<p>Profesjonalne usługi serwisowe najwyższej jakości</p>
+</div>
+<div class="grid-services">
+<div class="card">
+<i class="fas fa-mobile-alt"></i>
+<h3>Naprawa Telefonów</h3>
+<p>Wymiana szybki, baterii, naprawa gniazd ładowania oraz ratowanie urządzeń po zalaniu. Obsługujemy wszystkie marki, w tym najnowsze modele 5G+.</p>
+</div>
+<div class="card">
+<i class="fas fa-laptop"></i>
+<h3>Serwis Laptopów</h3>
+<p>Czyszczenie układu chłodzenia, wymiana matryc, klawiatur oraz naprawa płyt głównych. Modernizacja sprzętu z użyciem Ai do diagnostyki.</p>
+</div>
+<div class="card">
+<i class="fas fa-desktop"></i>
+<h3>Komputery PC</h3>
+        <p>Optymalizacja systemu, usuwanie wirusów, składanie zestawów gamingowych i profesjonalne doradztwo sprzętowe z symulacjami AI.</p>
+</div>
+<div class="card">
+<i class="fas fa-tablet-alt"></i>
+<h3>Tablety & iPady</h3>
+<p>Naprawa ekranów dotykowych, wymiana baterii oraz rozwiązywanie problemów programowych dla wszystkich modeli tabletów.</p>
+</div>
+<div class="card">
+<i class="fas fa-hdd"></i>
+<h3>Odzyskiwanie Danych</h3>
+<p>Profesjonalne odzyskiwanie danych z uszkodzonych dysków, SSD, kart pamięci i innych nośników z wykorzystaniem AI.</p>
+</div>
+<div class="card">
+<i class="fas fa-shield-alt"></i>
+<h3>Zabezpieczenia</h3>
+<p>Instalacja systemów antywirusowych, firewall i kompleksowa ochrona przed zagrożeniami cybernetycznymi.</p>
+</div>
+</div>
+</section>
 
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString();
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+<!-- Process Timeline -->
+<section id="process">
+<div class="section-title">
+<h2>Jak Przebiega Naprawa?</h2>
+<p>Prosty i przejrzysty proces w 5 krokach</p>
+</div>
+<div class="process-timeline">
+<div class="timeline-item">
+<div class="timeline-content">
+<h3>1. Diagnostyka</h3>
+<p>Bezpłatna diagnostyka Twojego sprzętu z wykorzystaniem zaawansowanych narzędzi AI i VR. Identyfikujemy problem w 15 minut.</p>
+</div>
+<div class="timeline-dot">1</div>
+<div></div>
+</div>
+<div class="timeline-item">
+<div></div>
+<div class="timeline-dot">2</div>
+<div class="timeline-content">
+<h3>2. Wycena</h3>
+<p>Otrzymujesz dokładną wycenę naprawy wraz z czasem realizacji. Bez ukrytych kosztów, pełna transparentność.</p>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-content">
+<h3>3. Naprawa</h3>
+<p>Nasi eksperci przeprowadzają naprawę używając oryginalnych części i najnowocześniejszego sprzętu.</p>
+</div>
+<div class="timeline-dot">3</div>
+<div></div>
+</div>
+<div class="timeline-item">
+<div></div>
+<div class="timeline-dot">4</div>
+<div class="timeline-content">
+<h3>4. Testowanie</h3>
+<p>Wieloetapowe testy jakości zapewniają, że Twój sprzęt działa idealnie. Symulacje obciążeniowe i testy wydajności.</p>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-content">
+<h3>5. Odbiór</h3>
+<p>Odbierasz w pełni sprawny sprzęt z gwarancją i instrukcjami konserwacji. Dostawa kurierem lub odbiór osobisty.</p>
+</div>
+<div class="timeline-dot">5</div>
+<div></div>
+</div>
+</div>
+</section>
 
-        // Współrzędne dla Lubochni
-        var map = L.map('map').setView([51.6114, 20.0456], 13); 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-        L.marker([51.6114, 20.0456]).addTo(map).bindPopup("<b>WOJTECH Serwis</b><br>Zapraszamy!").openPopup();
-    </script>
+<!-- Cost Calculator -->
+<section id="calculator">
+<div class="section-title">
+<h2>Kalkulator Kosztów</h2>
+<p>Sprawdź orientacyjny koszt naprawy</p>
+</div>
+<div class="calculator">
+<div class="calc-group">
+<label for="device-type">Typ urządzenia</label>
+<select id="device-type" onchange="calculateCost()">
+<option value="0">Wybierz urządzenie...</option>
+<option value="phone">Telefon</option>
+<option value="laptop">Laptop</option>
+<option value="pc">Komputer PC</option>
+<option value="tablet">Tablet</option>
+</select>
+</div>
+<div class="calc-group">
+<label for="repair-type">Rodzaj naprawy</label>
+<select id="repair-type" onchange="calculateCost()">
+<option value="0">Wybierz naprawę...</option>
+<option value="screen">Wymiana ekranu/matrycy</option>
+<option value="battery">Wymiana baterii</option>
+<option value="charging">Naprawa gniazda ładowania</option>
+<option value="water">Uszkodzenie wodą</option>
+<option value="software">Problem z oprogramowaniem</option>
+<option value="motherboard">Naprawa płyty głównej</option>
+</select>
+</div>
+<div class="calc-result" id="calc-result" style="display: none;">
+<h3>Orientacyjny koszt naprawy:</h3>
+<div class="calc-price" id="calc-price">0 zł</div>
+<p style="color: var(--text-muted); margin-top: 15px;">*Ostateczna cena po diagnostyce</p>
+<button class="btn btn-primary" style="margin-top: 20px;" onclick="location.href='#contact'">Umów się na naprawę</button>
+</div>
+</div>
+</section>
+
+<!-- Warranty Section -->
+<section id="warranty">
+<div class="section-title">
+<h2>Gwarancja i Bezpieczeństwo</h2>
+<p>Twoje urządzenie w dobrych rękach</p>
+</div>
+<div class="warranty-grid">
+<div class="warranty-card">
+<div class="warranty-icon">🛡️</div>
+<h3>Gwarancja Naprawy</h3>
+<div class="warranty-period">12 miesięcy</div>
+<p>Pełna gwarancja na wszystkie wykonane naprawy i wymienione części</p>
+</div>
+<div class="warranty-card">
+<div class="warranty-icon">🔒</div>
+<h3>Ochrona Danych</h3>
+<div class="warranty-period">100%</div>
+<p>Pełna poufność i bezpieczeństwo Twoich danych osobowych</p>
+</div>
+<div class="warranty-card">
+<div class="warranty-icon">⚡</div>
+<h3>Szybka Realizacja</h3>
+<div class="warranty-period">24-48h</div>
+<p>Większość napraw realizujemy w ciągu 1-2 dni roboczych</p>
+</div>
+<div class="warranty-card">
+<div class="warranty-icon">✅</div>
+<h3>Oryginalne Części</h3>
+<div class="warranty-period">Premium</div>
+<p>Używamy tylko oryginalnych i certyfikowanych części zamiennych</p>
+</div>
+</div>
+</section>
+
+<!-- Technologies -->
+<section id="technologies">
+<div class="section-title">
+<h2>Technologie</h2>
+<p>Narzędzia, którymi się posługujemy</p>
+</div>
+<div class="tech-grid">
+<div class="tech-item">
+<i class="fas fa-brain"></i>
+<h4>AI Diagnostyka</h4>
+</div>
+<div class="tech-item">
+<i class="fas fa-vr-cardboard"></i>
+<h4>VR Testing</h4>
+</div>
+<div class="tech-item">
+<i class="fas fa-microchip"></i>
+<h4>Mikrolutowanie</h4>
+</div>
+<div class="tech-item">
+<i class="fas fa-microscope"></i>
+<h4>Mikroskopy HD</h4>
+</div>
+<div class="tech-item">
+<i class="fas fa-bolt"></i>
+<h4>Testy Elektryczne</h4>
+</div>
+<div class="tech-item">
+<i class="fas fa-cloud"></i>
+<h4>Cloud Backup</h4>
+</div>
+</div>
+</section>
+
+<!-- FAQ Section -->
+<section id="faq">
+<div class="section-title">
+<h2>Najczęściej Zadawane Pytania</h2>
+<p>Odpowiedzi na Twoje wątpliwości</p>
+</div>
+<div class="faq-container">
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+Jak długo trwa naprawa?
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">
+Większość napraw realizujemy w ciągu 24-48 godzin. Standardowe naprawy jak wymiana ekranu czy baterii często tego samego dnia. Bardziej skomplikowane naprawy płyt głównych mogą zająć do 3-5 dni roboczych.
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+Czy diagnostyka jest płatna?
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">
+Nie! Oferujemy całkowicie bezpłatną diagnostykę dla wszystkich urządzeń. Płacisz tylko wtedy, gdy zdecydujesz się na naprawę po otrzymaniu wyceny.
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+Jakie części wykorzystujecie?
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">
+Używamy wyłącznie oryginalnych części producenta lub certyfikowanych zamienników najwyższej jakości. Wszystkie części objęte są gwarancją.
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+Co z moimi danymi?
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">
+Twoje dane są w 100% bezpieczne. Nie przeglądamy, nie kopiujemy ani nie udostępniamy żadnych danych osobowych. Wszystkie naprawy przeprowadzane są z zachowaniem pełnej poufności.
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+Czy naprawiacie urządzenia Apple?
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">
+Tak! Specjalizujemy się w naprawie iPhone'ów, iPadów, MacBooków i innych urządzeń Apple. Posiadamy certyfikowanych techników i oryginalne narzędzia serwisowe.
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+Czy oferujecie naprawy mobilne?
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">
+Tak, dla klientów z okolic oferujemy usługę odbioru i dostawy kurierem. Dla prostych napraw oferujemy również serwis mobilny bezpośrednio u klienta.
+</div>
+</div>
+</div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials">
+<div class="section-title">
+<h2>Co Mówią Nasi Klienci?</h2>
+<p>Opinie zadowolonych klientów</p>
+</div>
+<div class="grid-services">
+<div class="card">
+<div style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+<p>"Szybka i profesjonalna naprawa mojego Samsunga S20. Wymienili szybkę w 2 godziny. Wygląda jak nowy! Super obsługa."</p>
+<p style="text-align: right; color: var(--text-muted); margin-top: 15px;">- Anna Kowalska</p>
+</div>
+<div class="card">
+<div style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+<p>"Laptop po wymianie matrycy działa idealnie. Obszerny opis diagnostyki  - od razu widziałem co jest nie tak. Polecam!"</p>
+<p style="text-align: right; color: var(--text-muted); margin-top: 15px;">- Michał Sadowski</p>
+</div>
+<div class="card">
+<div style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+<p>"Zbudowali mi potężny PC do gamingu z RTX 5090. Wszystko dopasowane idealnie, chłodzi się świetnie. Zero problemów od 6 miesięcy!"</p>
+<p style="text-align: right; color: var(--text-muted); margin-top: 15px;">- Jan Piotrowski</p>
+</div>
+<div class="card">
+<div style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+<p>"Uratowali dane z mojego zalego laptopa. Myślałem że wszystko stracone, ale AI diagnostyka wykryła że dysk jest sprawny. Profesjonaliści!"</p>
+<p style="text-align: right; color: var(--text-muted); margin-top: 15px;">- Katarzyna Nowak</p>
+</div>
+<div class="card">
+<div style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+<p>"MacBook Air naprawiony w 24h. Wymiana baterii i czyszczenie. Teraz działa 2x szybciej. Świetna cena i gwarancja. 10/10!"</p>
+<p style="text-align: right; color: var(--text-muted); margin-top: 15px;">- Tomasz Wiśniewski</p>
+</div>
+<div class="card">
+<div style="color: var(--primary); font-size: 2rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+<p>"Tablet Samsung po naprawie wygląda i działa jak nowy. Bardzo miła obsługa i uczciwe ceny. Na pewno wrócę jak będzie potrzeba!"</p>
+<p style="text-align: right; color: var(--text-muted); margin-top: 15px;">- Magdalena Lewandowska</p>
+</div>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+<div class="section-title">
+<h2>Kontakt i Lokalizacja</h2>
+<p>Skontaktuj się z nami już dziś</p>
+</div>
+<div class="contact-wrapper">
+<div class="card">
+<h3>📩 Napisz do nas</h3>
+<form id="contact-form">
+<input type="text" placeholder="Imię i Nazwisko" required>
+<input type="email" placeholder="Adres E-mail" required>
+<input type="tel" placeholder="Numer telefonu">
+<textarea rows="5" placeholder="Opisz problem ze sprzętem lub zadaj pytanie..." required></textarea>
+<button type="submit" class="btn btn-primary" style="width: 100%;">Wyślij zgłoszenie</button>
+</form>
+<div style="margin-top: 30px; color: var(--text-muted); line-height: 2;">
+<p><i class="fas fa-map-marker-alt" style="color: var(--primary); margin-right: 10px;"></i> <strong>Lubochnia, ul. Tomaszowska 23a</strong></p>
+<p><i class="fas fa-phone" style="color: var(--primary); margin-right: 10px;"></i> <a href="tel:+48789229450" style="color: var(--primary); text-decoration: none;">+48 789 229 450</a></p>
+<p><i class="fas fa-envelope" style="color: var(--primary); margin-right: 10px;"></i> prooosty@gmail.com</p>
+<p><i class="fas fa-clock" style="color: var(--primary); margin-right: 10px;"></i> Pn-Pt: 9:00-18:00 | So: 10:00-14:00</p>
+</div>
+</div>
+<div>
+<div id="map"></div>
+<div class="card" style="margin-top: 20px; text-align: center;">
+<div id="clock" style="font-size: 2.5rem; font-weight: bold; color: var(--primary); text-shadow: 0 0 20px rgba(0,255,136,0.5);"></div>
+<p style="margin: 10px 0 0; color: var(--text-muted);">Czas lokalny w naszym serwisie</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- Footer -->
+<footer>
+<div class="logo" style="font-size: 2rem; margin-bottom: 20px;">⚡ WOJTECH</div>
+<p>© 2026 WOJTECH. Wszystkie prawa zastrzeżone.</p>
+<p style="margin: 10px 0; font-size: 0.9rem;">Profesjonalny serwis elektroniki | Lubochnia, ul. Tomaszowska 23a</p>
+<div class="footer-links">
+<a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+<a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+<a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+<a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+</div>
+</footer>
+
+<!-- Live Chat Widget -->
+<div class="chat-widget">
+<div class="chat-button" onclick="toggleChat()">
+<i class="fas fa-comments"></i>
+</div>
+<div class="chat-box" id="chat-box">
+<div class="chat-header">
+<span>💬 Czat na Żywo</span>
+<span class="chat-close" onclick="toggleChat()">✕</span>
+</div>
+<div class="chat-messages" id="chat-messages">
+<div class="chat-message bot">
+Witaj! Jestem Asystentem WOJTECH AI. Jak mogę Ci pomóc? 😊
+</div>
+</div>
+<div class="chat-input-area">
+<input type="text" id="chat-input" placeholder="Napisz wiadomość..." onkeypress="handleChatKeyPress(event)">
+<button class="chat-send" onclick="sendChatMessage()">
+<i class="fas fa-paper-plane"></i>
+</button>
+</div>
+</div>
+</div>
+
+<!-- Notification Toast -->
+<div class="notification" id="notification">
+<i class="fas fa-check-circle"></i>
+<span id="notification-text">Wiadomość została wysłana!</span>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+// Particles Animation
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = [];
+const particleCount = 80;
+
+class Particle {
+constructor() {
+this.x = Math.random() * canvas.width;
+this.y = Math.random() * canvas.height;
+this.vx = (Math.random() - 0.5) * 0.5;
+this.vy = (Math.random() - 0.5) * 0.5;
+this.size = Math.random() * 2 + 1;
+}
+
+update() {
+this.x += this.vx;
+this.y += this.vy;
+if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+}
+
+draw() {
+ctx.fillStyle = 'rgba(0, 255, 136, 0.5)';
+ctx.beginPath();
+ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+ctx.fill();
+}
+}
+
+for (let i = 0; i < particleCount; i++) {
+particles.push(new Particle());
+}
+
+function animateParticles() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+particles.forEach(p => {
+p.update();
+p.draw();
+});
+// Draw connections
+for (let i = 0; i < particles.length; i++) {
+for (let j = i + 1; j < particles.length; j++) {
+const dx = particles[i].x - particles[j].x;
+const dy = particles[i].y - particles[j].y;
+const dist = Math.sqrt(dx * dx + dy * dy);
+if (dist < 150) {
+ctx.strokeStyle = `rgba(0, 255, 136, ${0.2 * (1 - dist / 150)})`;
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(particles[i].x, particles[i].y);
+ctx.lineTo(particles[j].x, particles[j].y);
+ctx.stroke();
+}
+}
+}
+requestAnimationFrame(animateParticles);
+}
+
+animateParticles();
+
+window.addEventListener('resize', () => {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+});
+
+// Scroll Progress Bar
+window.addEventListener('scroll', () => {
+const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+const scrolled = (window.scrollY / windowHeight) * 100;
+document.getElementById('scroll-progress').style.width = scrolled + '%';
+});
+
+// Clock
+function updateClock() {
+const now = new Date();
+document.getElementById('clock').textContent = now.toLocaleTimeString('pl-PL');
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Map
+const map = L.map('map').setView([51.6114, 20.0456], 14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© OpenStreetMap'
+}).addTo(map);
+const marker = L.marker([51.6114, 20.0456]).addTo(map);
+marker.bindPopup("<strong>WOJTECH Serwis</strong><br>Lubochnia, ul. Tomaszowska 23a<br>📞 +48 789 229 450").openPopup();
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Mobile menu toggle
+function toggleMenu() {
+document.querySelector('.nav-links').classList.toggle('active');
+}
+
+// Stats Counter Animation
+function animateCounter(element) {
+const target = parseInt(element.dataset.target);
+const duration = 2000;
+const step = target / (duration / 16);
+let current = 0;
+const timer = setInterval(() => {
+current += step;
+if (current >= target) {
+element.textContent = target + (element.textContent.includes('%') ? '%' : '');
+clearInterval(timer);
+} else {
+element.textContent = Math.floor(current) + (element.textContent.includes('%') ? '%' : '');
+}
+}, 16);
+}
+
+// Intersection Observer for animations
+const observer = new IntersectionObserver(entries => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('visible');
+if (entry.target.classList.contains('stat-number') && entry.target.textContent === '0') {
+animateCounter(entry.target);
+}
+}
+});
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.section-title, .card, .stat-card, .timeline-item, .faq-item, .tech-item, .warranty-card').forEach(el => observer.observe(el));
+
+// Initialize stat counters
+document.querySelectorAll('.stat-number').forEach(el => observer.observe(el));
+
+// Cost Calculator
+const prices = {
+phone: { screen: 250, battery: 150, charging: 120, water: 300, software: 80, motherboard: 400 },
+laptop: { screen: 450, battery: 200, charging: 180, water: 500, software: 150, motherboard: 600 },
+pc: { screen: 0, battery: 0, charging: 0, water: 0, software: 120, motherboard: 350 },
+tablet: { screen: 300, battery: 180, charging: 150, water: 350, software: 100, motherboard: 450 }
+};
+
+function calculateCost() {
+const device = document.getElementById('device-type').value;
+const repair = document.getElementById('repair-type').value;
+const resultDiv = document.getElementById('calc-result');
+const priceDiv = document.getElementById('calc-price');
+if (device !== '0' && repair !== '0' && prices[device] && prices[device][repair]) {
+const price = prices[device][repair];
+resultDiv.style.display = 'block';
+priceDiv.textContent = price + ' - ' + (price + 100) + ' zł';
+} else {
+resultDiv.style.display = 'none';
+}
+}
+
+// FAQ Toggle
+function toggleFaq(element) {
+const faqItem = element.parentElement;
+const wasActive = faqItem.classList.contains('active');
+document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
+if (!wasActive) {
+faqItem.classList.add('active');
+}
+}
+
+// Form submission
+document.getElementById('contact-form').addEventListener('submit', (e) => {
+e.preventDefault();
+showNotification('Zgłoszenie wysłane! Skontaktujemy się wkrótce. ✅');
+e.target.reset();
+});
+
+// Notification system
+function showNotification(message) {
+const notification = document.getElementById('notification');
+const notificationText = document.getElementById('notification-text');
+notificationText.textContent = message;
+notification.classList.add('show');
+setTimeout(() => {
+notification.classList.remove('show');
+}, 4000);
+}
+
+// Chat Widget
+function toggleChat() {
+document.getElementById('chat-box').classList.toggle('active');
+}
+
+function handleChatKeyPress(e) {
+if (e.key === 'Enter') {
+sendChatMessage();
+}
+}
+
+const chatResponses = [
+"Dziękujemy za wiadomość! Nasz zespół odpowie wkrótce. 😊",
+"Zapraszamy do kontaktu telefonicznego: +48 789 229 450",
+"Możemy pomóc w diagnostyce problemu. Opisz dokładniej usterkę.",
+"Nasze godziny otwarcia: Pn-Pt 9:00-18:00, So 10:00-14:00",
+"Oferujemy bezpłatną diagnostykę! Zapraszamy do serwisu.",
+"Czy chodzi o telefon, laptop, czy komputer PC?"
+];
+
+function sendChatMessage() {
+const input = document.getElementById('chat-input');
+const message = input.value.trim();
+if (!message) return;
+const messagesContainer = document.getElementById('chat-messages');
+const userMsg = document.createElement('div');
+userMsg.className = 'chat-message';
+userMsg.style.background = 'rgba(96, 239, 255, 0.2)';
+userMsg.style.marginLeft = 'auto';
+userMsg.textContent = message;
+messagesContainer.appendChild(userMsg);
+input.value = '';
+setTimeout(() => {
+const botMsg = document.createElement('div');
+botMsg.className = 'chat-message bot';
+botMsg.textContent = chatResponses[Math.floor(Math.random() * chatResponses.length)];
+messagesContainer.appendChild(botMsg);
+messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}, 1000);
+messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Welcome notification after 3 seconds
+setTimeout(() => {
+showNotification('Witaj w WOJTECH! 👋 Potrzebujesz pomocy? Skorzystaj z czatu na żywo!');
+}, 3000);
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const target = document.querySelector(this.getAttribute('href'));
+if (target) {
+target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// Close mobile menu if open
+document.querySelector('.nav-links').classList.remove('active');
+}
+});
+});
+</script>
 </body>
 </html>
