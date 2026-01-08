@@ -3,316 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>www.wojtech.pl</title>
+    <title>WOJTECH | Profesjonalny Serwis Elektroniki</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #00ff88;
+            --primary-dark: #00c066;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            background-color: #f0f0f0;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-light);
+            background-color: var(--bg-dark);
+            scroll-behavior: smooth;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
 
-        h1, h2, h3 {
-            color: #00a86b;
+        /* Hero Section */
+        header {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin: 0;
+            letter-spacing: -2px;
+            background: linear-gradient(to right, #00ff88, #60efff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        /* Cards & Layout */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .grid-services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         .card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            padding: 20px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
         }
 
         .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #00a86b;
-            color: #fff;
+            padding: 14px 28px;
+            border-radius: 8px;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--bg-dark);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
         }
 
         .btn:hover {
-            background-color: #008f5b;
+            opacity: 0.8;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
         }
 
-        .widget-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .widget {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            width: calc(33% - 10px); /* Three widgets in a row */
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        #map {
-            width: 100%;
-            height: 300px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .clock {
-            font-size: 2em;
-            margin: 20px 0;
-            color: #00a86b;
-        }
-
-        .location {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .status {
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        .contact-details {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .contact-item {
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        .contact-details p {
-            margin: 5px 0;
-            font-size: 1em;
-            color: #333;
-        }
-
-        .contact-details a {
-            text-decoration: none;
-            color: #00a86b;
-            font-weight: bold;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* Contact Section */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
         }
 
         input, textarea {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1em;
             width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: white;
             box-sizing: border-box;
         }
 
-        textarea {
-            resize: none;
+        /* Map & Widgets */
+        #map {
+            height: 350px;
+            border-radius: 16px;
+            border: 2px solid var(--card-bg);
+        }
+
+        .widget-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .mini-widget {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .mini-widget h3 {
+            font-size: 0.9rem;
+            margin-top: 0;
+            color: var(--primary);
         }
 
         @media (max-width: 768px) {
-            .widget-container {
-                flex-direction: column;
-            }
-
-            .widget {
-                width: 100%;
-            }
-
-            .contact-details {
-                flex-direction: column;
-            }
-
-            .contact-details div {
-                width: 100%;
-                margin-bottom: 15px;
-            }
+            .contact-wrapper { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
+
+    <header>
+        <div class="hero">
             <h1>WOJTECH</h1>
-            <p>Witaj w miejscu, gdzie przyszłość spotyka się z teraźniejszością. Specjalizuje się w naprawach telefonów i komputerów z użyciem najnowocześniejszych technologii.</p>
-            <a href="#contact" class="btn">Skontaktuj się</a>
-            <a href="#services" class="btn">Usługi</a>
+            <p>Ekspercka naprawa laptopów, telefonów i komputerów. <br>Przywracamy Twój sprzęt do życia przy użyciu najnowszych technologii.</p>
+            <div class="btn-group">
+                <a href="#contact" class="btn btn-primary">Zgłoś Naprawę</a>
+                <a href="#services" class="btn btn-secondary">Zobacz Usługi</a>
+            </div>
         </div>
+    </header>
 
-        <div class="card" id="contact">
-            <h2>Kontakt</h2>
-            <div class="contact-details">
-                <div class="contact-item">
-                    <strong>Telefon:</strong>
-                    <p><a href="tel:+48789229450">+48 789 229 450</a></p>
+    <div class="container">
+        
+        <section id="services">
+            <div class="section-title">
+                <h2>Czym się zajmujemy?</h2>
+            </div>
+            <div class="grid-services">
+                <div class="card">
+                    <h3>📱 Naprawa Telefonów</h3>
+                    <p>Wymiana szybki, baterii, naprawa gniazd ładowania oraz ratowanie urządzeń po zalaniu. Obsługujemy wszystkie marki.</p>
                 </div>
-                <div class="contact-item">
-                    <strong>Email:</strong>
-                    <p><a href="mailto:prooosty@gmail.com">prooosty@gmail.com</a></p>
+                <div class="card">
+                    <h3>💻 Serwis Laptopów</h3>
+                    <p>Czyszczenie układu chłodzenia, wymiana matryc, klawiatur oraz naprawa płyt głównych i modernizacja sprzętu.</p>
                 </div>
-                <div class="contact-item">
-                    <strong>Adres:</strong>
-                    <p>Lubochnia, ul. Tomaszowska 23a</p>
+                <div class="card">
+                    <h3>🖥️ Komputery PC</h3>
+                    <p>Optymalizacja systemu, usuwanie wirusów, składanie zestawów gamingowych i profesjonalne doradztwo sprzętowe.</p>
                 </div>
             </div>
-            <form action="#" method="post" class="contact-form">
-                <input type="text" name="name" placeholder="Twoje imię" required>
-                <input type="email" name="email" placeholder="Twój email" required>
-                <textarea name="message" rows="5" placeholder="Wiadomość" required></textarea>
-                <button type="submit" class="btn">Wyślij</button>
-            </form>
-        </div>
+        </section>
 
-        <div class="card" id="services">
-            <h2>Nasze Usługi</h2>
-            <div>
-                <h3>Naprawa telefonów</h3>
-                <p>Oferuje szeroki zakres usług naprawy telefonów, w tym wymianę uszkodzonego ekranu, naprawy baterii, usunięcie usterek związanych z oprogramowaniem, a także naprawy portów ładowania oraz problemów z dźwiękiem.</p>
+        <section id="contact">
+            <div class="section-title">
+                <h2>Kontakt i Lokalizacja</h2>
             </div>
-            <div>
-                <h3>Naprawa komputerów</h3>
-                <p>Moje naprawy komputerów obejmują zarówno komputery stacjonarne, jak i laptopy. Specjalizujemy się w diagnozowaniu i naprawie usterek sprzętowych, wymianie komponentów, usuwaniu wirusów, instalacji nowego oprogramowania oraz optymalizacji systemu.</p>
+            <div class="contact-wrapper">
+                <div class="card">
+                    <h3>Napisz do nas</h3>
+                    <form action="#" class="contact-form">
+                        <input type="text" placeholder="Imię i Nazwisko" required>
+                        <input type="email" placeholder="Adres E-mail" required>
+                        <textarea rows="5" placeholder="Opisz problem ze sprzętem..." required></textarea>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Wyślij zgłoszenie</button>
+                    </form>
+                    <div style="margin-top: 25px; color: var(--text-muted);">
+                        <p>📍 Lubochnia, ul. Tomaszowska 23a</p>
+                        <p>📞 <a href="tel:+48789229450" style="color: var(--primary);">+48 789 229 450</a></p>
+                        <p>✉️ prooosty@gmail.com</p>
+                    </div>
+                </div>
+                <div>
+                    <div id="map"></div>
+                    <div class="card" style="margin-top: 20px; text-align: center;">
+                        <div id="clock" style="font-size: 2.5rem; font-weight: bold; color: var(--primary);"></div>
+                        <p style="margin: 0; color: var(--text-muted);">Czas lokalny w naszym serwisie</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="widget-container">
-            <div class="widget">
-                <h2>Zegar i Mapa Świata</h2>
-                <div class="location">Lokalizacja: Polska, Woj. Łódzkie</div>
-                <div id="clock" class="clock"></div>
-                <div id="map"></div>
-                <div class="status">Status: Online</div>
+        <section id="tools">
+            <div class="section-title">
+                <h2>Twoje Narzędzia Sieciowe</h2>
+                <p style="color: var(--text-muted);">Sprawdź parametry swojego połączenia w czasie rzeczywistym.</p>
             </div>
-            <div class="widget">
-                <h2>Typ Urządzenia</h2>
-                <div class="vpn-widget" type="geoip/device-type"></div>
+            <div class="widget-grid">
+                <div class="mini-widget"><h3>IP</h3><div class="vpn-widget" type="geoip/ip"></div></div>
+                <div class="mini-widget"><h3>Miasto</h3><div class="vpn-widget" type="geoip/city"></div></div>
+                <div class="mini-widget"><h3>Dostawca</h3><div class="vpn-widget" type="geoip/isp"></div></div>
+                <div class="mini-widget"><h3>System</h3><div class="vpn-widget" type="geoip/os"></div></div>
+                <div class="mini-widget"><h3>Prędkość</h3><div class="vpn-widget" type="speed/speedtest"></div></div>
+                <div class="mini-widget"><h3>Pogoda</h3><div class="vpn-widget" type="weather/current"></div></div>
             </div>
-            <div class="widget">
-                <h2>Lokalizacja</h2>
-                <div class="vpn-widget" type="geoip/location"></div>
-            </div>
-            <div class="widget">
-                <h2>Test Prędkości</h2>
-                <div class="vpn-widget" type="speed/speedtest"></div>
-            </div>
-            <div class="widget">
-                <h2>DNS Records</h2>
-                <div class="vpn-widget" type="domain/dns"></div>
-            </div>
-            <div class="widget">
-                <h2>DNS Lookup</h2>
-                <div class="vpn-widget" type="geoip/dns"></div>
-            </div>
-            <div class="widget">
-                <h2>Adres IP</h2>
-                <div class="vpn-widget" type="geoip/ip"></div>
-            </div>
-            <div class="widget">
-                <h2>Pogoda</h2>
-                <div class="vpn-widget" type="weather/current"></div>
-            </div>
-            <div class="widget">
-                <h2>Kod Pocztowy</h2>
-                <div class="vpn-widget" type="geoip/zipcode"></div>
-            </div>
-            <div class="widget">
-                <h2>Miasto</h2>
-                <div class="vpn-widget" type="geoip/city"></div>
-            </div>
-            <div class="widget">
-                <h2>Kontynent</h2>
-                <div class="vpn-widget" type="geoip/continent"></div>
-            </div>
-            <div class="widget">
-                <h2>Kraj</h2>
-                <div class="vpn-widget" type="geoip/country"></div>
-            </div>
-            <div class="widget">
-                <h2>Waluta</h2>
-                <div class="vpn-widget" type="geoip/currency"></div>
-            </div>
-            <div class="widget">
-                <h2>Dokładna Lokalizacja</h2>
-                <div class="vpn-widget" type="geoip/exact-location"></div>
-            </div>
-            <div class="widget">
-                <h2>ISP</h2>
-                <div class="vpn-widget" type="geoip/isp"></div>
-            </div>
-            <div class="widget">
-                <h2>OS</h2>
-                <div class="vpn-widget" type="geoip/os"></div>
-            </div>
-            <div class="widget">
-                <h2>Region</h2>
-                <div class="vpn-widget" type="geoip/region"></div>
-            </div>
-            <div class="widget">
-                <h2>Strefa Czasowa</h2>
-                <div class="vpn-widget" type="geoip/time-zone"></div>
-            </div>
-            <div class="widget">
-                <h2>Alerty Pogodowe</h2>
-                <div class="vpn-widget" type="weather/national-alerts"></div>
-            </div>
-            <div class="widget">
-                <h2>Prognoza Godzinowa</h2>
-                <div class="vpn-widget" type="weather/forecast-1hour"></div>
-            </div>
-            <div class="widget">
-                <h2>WHOIS Lookup</h2>
-                <div class="vpn-widget" type="domain/whois"></div>
-            </div>
-        </div>
+        </section>
+
     </div>
+
+    <footer style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
+        &copy; 2026 WOJTECH. Wszystkie prawa zastrzeżone.
+    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://widget.vpn.com/vpn-widget.js"></script>
     <script>
-        // Zegar lokalny
         function updateClock() {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeString = `${hours}:${minutes}:${seconds}`;
-            document.getElementById('clock').textContent = timeString;
+            document.getElementById('clock').textContent = now.toLocaleTimeString();
         }
-
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Mapa Leaflet.js
-        var map = L.map('map').setView([51.7592, 19.4560], 7); // Polska, woj. łódzkie
-
+        var map = L.map('map').setView([51.6114, 20.0456], 13); // Współrzędne dla Lubochni
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '© OpenStreetMap'
         }).addTo(map);
-
-        var marker = L.marker([51.7592, 19.4560]).addTo(map);
-        marker.bindPopup("<b>Polska, Woj. Łódzkie</b>").openPopup();
+        L.marker([51.6114, 20.0456]).addTo(map).bindPopup("<b>WOJTECH Serwis</b><br>Zapraszamy!").openPopup();
     </script>
 </body>
 </html>
